@@ -13,6 +13,11 @@ import zazuImg from "./assets/zazu.jpg";
 import bunnyImg from "./assets/bunny.jpg";
 import catsImg from "./assets/cats.png";
 import bannerImg from "./assets/banner.png";
+import paperOpenMp3 from './assets/paper.mp3';
+import paperCloseMp3 from './assets/paper-hide.mp3';
+import candleBlowMp3 from './assets/candle-blow.mp3';
+import happyBirthdayMp3 from './assets/happy-birthday.mp3';
+import eatCakeMp3 from './assets/eat-cake.mp3';
 
 import useOnClickOutside from "./hooks/useOnClickOutside";
 import styles from "./App.module.scss";
@@ -21,24 +26,24 @@ import { Howl } from "howler";
 import classNames from "classnames";
 
 const paperOpenSound = new Howl({
-  src: ["/paper.mp3"],
+  src: [paperOpenMp3],
 });
 
 const paperHideSound = new Howl({
-  src: ["/paper-hide.mp3"],
+  src: [paperCloseMp3],
 });
 
 const candleSound = new Howl({
-  src: ["/candle-blow.mp3"],
+  src: [candleBlowMp3],
 });
 
 const happyBirthdayMusic = new Howl({
-  src: ["/happy-birthday.mp3"],
+  src: [happyBirthdayMp3],
   volume: 0.5,
 });
 
 const eatCakeSound = new Howl({
-  src: ["/eat-cake.mp3"],
+  src: [eatCakeMp3],
   volume: 1.5,
 });
 
@@ -57,7 +62,7 @@ function App() {
   const paperRef = useRef(null);
 
   useOnClickOutside(paperRef, () => {
-    if (isLetterRead && isLetterOpen) {
+    if (isLetterOpen) {
       setIsLetterOpen(false);
       paperHideSound.play();
       happyBirthdayMusic.play();
@@ -67,6 +72,10 @@ function App() {
   const handleLetterOpen = () => {
     setIsLetterOpen(true);
     paperOpenSound.play();
+
+    setTimeout(() => {
+      setIsLetterRead(true);
+    }, 500)
   };
 
   const handleCakeClick = () => {
@@ -82,29 +91,9 @@ function App() {
   };
 
   useEffect(() => {
-    const element = paperRef.current;
-
-    const handleScroll = () => {
-      if (element.scrollHeight - element.scrollTop === element.clientHeight) {
-        setIsLetterRead(true);
-      }
-    };
-
-    if (element) {
-      element.addEventListener("scroll", handleScroll);
-    }
-
-    return () => {
-      if (element) {
-        element.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
     const handleEsc = (event) => {
       if (event.keyCode === 27) {
-        if (isLetterRead && isLetterOpen) {
+        if (isLetterOpen) {
           setIsLetterOpen(false);
           paperHideSound.play();
           happyBirthdayMusic.play();
@@ -117,7 +106,7 @@ function App() {
     return () => {
       document.removeEventListener("keydown", handleEsc);
     };
-  }, [isLetterRead, isLetterOpen]);
+  }, [isLetterOpen]);
 
   if (isMobileDevice()) {
     return (
@@ -177,7 +166,7 @@ function App() {
       >
         <div className={styles.paper}>
           <p className={styles.paper__text}>
-            {/* привіт, моя любіма дєвочка !!!!!
+            привіт, моя любіма дєвочка !!!!!
             <br />
             <br />
             сьогодні твій день і я дуже радий що можу тебе з ним привітати. за
@@ -193,14 +182,14 @@ function App() {
             <br />
             <br />
             <span>
-            p.s. тут є пасхалочка хихихихи
+              p.s. тут є пасхалочка хихихихи
 
             </span>
             <br />
             <span>
-            p.s.s. шоб закрити лист, клікни за межами паперу і загадай бажання 🥰
+              p.s.s. шоб закрити лист клікни за межами паперу
 
-            </span> */}
+            </span>
           </p>
           <div className={styles.lovePicContainer}>
             <div className={styles.lovePic}>
